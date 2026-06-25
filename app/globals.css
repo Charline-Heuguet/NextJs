@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #faf8fc;
+  --foreground: #2d2640;
 }
 
 @theme inline {
@@ -10,17 +10,47 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
+
+  --color-lavender-50: #f5f0fa;
+  --color-lavender-100: #ebe3f5;
+  --color-lavender-200: #d9cce8;
+  --color-lavender-900: #3d2f52;
+
+  --color-rose-300: #e8b4c8;
+  --color-rose-400: #d995b0;
+  --color-rose-500: #c9789a;
+
+  --color-slate-300: #c4c0cc;
+  --color-slate-400: #9a95a3;
+  --color-slate-500: #6b6575;
+  --color-slate-600: #524d5c;
+  --color-slate-700: #3a3544;
+  --color-slate-900: #1a1720;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #1a1720;
+    --foreground: #ebe3f5;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.page-transition {
+  animation: page-fade-in 0.5s ease-out;
 }
