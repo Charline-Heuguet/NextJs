@@ -1,13 +1,15 @@
-# My supa store — Ateliers Next.js
+# My supa store : Ateliers Next.js
 
 Boutique Next.js 16 (App Router, Prisma, SQLite) réalisée en TD.
 
 **Commandes utiles :**
 ```bash
 npm run dev        # serveur de développement
+npm run build      # build production
+npm start          # serveur production (prefetch, cache)
 npm run db:migrate # migrations Prisma
 npm run db:seed    # réinitialise les produits
-npx prisma studio  # interface base de données
+npx prisma studio  # interface base de données (lire l'URL affichée)
 ```
 
 ---
@@ -101,7 +103,51 @@ npx prisma studio  # interface base de données
 
 ## Atelier Jour 3
 
-*À venir.*
+**Objectif :** implémenter un flux complet sécurisé : auth, proxy, Server Actions, revalidation, gestion d'erreurs et test A/B sur le prefetch.
+
+**Ce qui a été fait :**
+
+**01 Page protégée et auth**
+- Modèle Prisma `User` (email, mot de passe hashé, rôle `USER` / `ADMIN`)
+- NextAuth v5 (`auth.ts`) avec provider Credentials et session JWT
+- Pages `/register`, `/login` et `/account` (protégée)
+- Server Actions `register`, `login`, `logout` avec `useActionState`
+- Header : trigramme, déconnexion, lien Admin visible uniquement pour les admins
+- Promotion admin via Prisma Studio (table `User`, champ `role`)
+
+**02 Proxy d'auth**
+- Fichier `proxy.ts` (Next.js 16, ex-middleware)
+- Routes `/admin/*` : redirection vers `/` si l'utilisateur n'a pas le rôle `ADMIN`
+
+**03 Formulaire Server Action**
+- Page `/admin/products/[slug]/edit` avec formulaire de modification
+- Validation Zod dans l'action `updateProduct`
+- Progressive enhancement : le formulaire fonctionne sans JavaScript
+
+**04 Cache et revalidation**
+- Catalogue home mis en cache via `unstable_cache` (tag `catalog-products`)
+- Invalidation via `revalidateTag` après mise à jour d'un produit
+
+**05 Gestion des erreurs**
+- Action `updateProduct` : retours `{ error }` / `{ success }`
+- Bouton **Tester une erreur** pour simuler un échec
+- Messages affichés dans l'UI via `useActionState`
+
+**06 Test A/B dans le proxy**
+- Tirage aléatoire 50/50, stocké dans le cookie `ab_prefetch` (variant A ou B)
+- Paramètre `?ab_prefetch=A` ou `?ab_prefetch=B` pour forcer le variant
+
+**07 Prefetch conditionnel**
+- Composant client `PrefetchLink`
+- Variant A : prefetch par défaut sur les liens produits
+- Variant B : prefetch au survol (`router.prefetch`)
+- Appliqué sur `ProductCard` et `SponsoredProductCard`
+- Test en production : `npm run build && npm start` (prefetch peu visible en dev)
+
+**Variables d'environnement (.env)**
+- `DATABASE_URL` : connexion SQLite
+- `AUTH_SECRET` : secret NextAuth
+- `AUTH_TRUST_HOST=true` : requis pour `npm start` en local
 
 ---
 
@@ -115,11 +161,15 @@ npx prisma studio  # interface base de données
 
 | Route | Description |
 |-------|-------------|
-| `/` | Accueil + produits sponsorisés + catalogue |
+| `/` | Accueil + produits sponsorisés + catalogue (cache `unstable_cache`) |
 | `/products` | Liste des produits |
 | `/products/[slug]` | Fiche produit (PPR, similaires, sponsorisés) |
 | `/sponsored` | Catalogue sponsorisé GraphQL |
-| `/admin` | Back-office |
+| `/login` | Connexion |
+| `/register` | Inscription |
+| `/account` | Espace personnel (authentifié) |
+| `/admin` | Back-office (protégé par proxy) |
+| `/admin/products/[slug]/edit` | Modification d'un produit |
 | `/demo` | Hub des pages de démo |
 | `/demo/rendering` | Comparaison statique / ISR / dynamique |
 | `/demo/cache` | Stratégies de cache GraphQL |
