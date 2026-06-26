@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import { AuthNav } from "@/components/layout/AuthNav";
 import { CartSummary } from "@/components/cart/CartSummary";
 import { CartSummarySkeleton } from "@/components/cart/CartSummarySkeleton";
 
@@ -36,6 +37,9 @@ export function Header() {
               ))}
             </ul>
           </nav>
+          <Suspense fallback={null}>
+            <AuthNav />
+          </Suspense>
           <Suspense fallback={<CartSummarySkeleton />}>
             <CartSummary />
           </Suspense>

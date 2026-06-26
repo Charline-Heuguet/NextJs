@@ -4,10 +4,10 @@ import {
   SponsoredProducts,
   SponsoredProductsSkeleton,
 } from "@/components/sponsored/SponsoredProducts";
-import { getProducts } from "@/domains/catalog/repository/productRepository";
+import { getCachedCatalogProducts } from "@/lib/cache/products";
 
 export default async function Home() {
-  const products = await getProducts();
+  const products = await getCachedCatalogProducts();
 
   return (
     <div className="mx-auto w-full max-w-6xl flex-1 px-6 py-12">

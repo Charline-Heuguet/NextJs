@@ -1,6 +1,11 @@
 import Image from "next/image";
-import Link from "next/link";
+import { cookies } from "next/headers";
 import type { SponsoredProduct } from "@/domains/sponsored/entity/sponsoredProduct";
+import { PrefetchLink } from "@/components/layout/PrefetchLink";
+import {
+  AB_PREFETCH_COOKIE,
+  parseAbPrefetchVariant,
+} from "@/lib/ab-test";
 import {
   formatSponsoredPrice,
   getSponsoredProductPath,
@@ -10,10 +15,19 @@ type SponsoredProductCardProps = {
   product: SponsoredProduct;
 };
 
-export function SponsoredProductCard({ product }: SponsoredProductCardProps) {
+export async function SponsoredProductCard({ product }: SponsoredProductCardProps) {
+  const cookieStore = await cookies();
+  const variant =
+    parseAbPrefetchVariant(cookieStore.get(AB_PREFETCH_COOKIE)?.value) ?? "A";
+
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-lavender-200 bg-white shadow-sm transition hover:border-rose-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900">
-      <Link href={getSponsoredProductPath(product.handle)} className="flex flex-1 flex-col">
+      <PrefetchLink
+        href={getSponsoredProductPath(product.handle)}
+        prefetch={variant === "A"}
+        prefetchOnHover={variant === "B"}
+        className="flex flex-1 flex-col"
+      >
         <div className="relative aspect-square overflow-hidden bg-lavender-100 dark:bg-slate-800">
           {product.imageUrl ? (
             <Image
@@ -43,7 +57,7 @@ export function SponsoredProductCard({ product }: SponsoredProductCardProps) {
             {formatSponsoredPrice(product)}
           </p>
         </div>
-      </Link>
+      </PrefetchLink>
     </article>
   );
 }

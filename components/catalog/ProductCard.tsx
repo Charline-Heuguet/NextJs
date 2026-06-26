@@ -1,6 +1,11 @@
 import Image from "next/image";
-import Link from "next/link";
+import { cookies } from "next/headers";
 import type { Product } from "@/domains/catalog/entity/product";
+import { PrefetchLink } from "@/components/layout/PrefetchLink";
+import {
+  AB_PREFETCH_COOKIE,
+  parseAbPrefetchVariant,
+} from "@/lib/ab-test";
 import {
   formatPrice,
   getProductPath,
@@ -12,13 +17,21 @@ type ProductCardProps = {
   product: Product;
 };
 
-export function ProductCard({ product }: ProductCardProps) {
+export async function ProductCard({ product }: ProductCardProps) {
+  const cookieStore = await cookies();
+  const variant =
+    parseAbPrefetchVariant(cookieStore.get(AB_PREFETCH_COOKIE)?.value) ?? "A";
   const inStock = isInStock(product);
   const lowStock = isLowStock(product);
 
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-lavender-200 bg-white shadow-sm transition hover:border-rose-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900 dark:hover:border-rose-400">
-      <Link href={getProductPath(product)} className="flex flex-1 flex-col">
+      <PrefetchLink
+        href={getProductPath(product)}
+        prefetch={variant === "A"}
+        prefetchOnHover={variant === "B"}
+        className="flex flex-1 flex-col"
+      >
         <div className="relative aspect-square overflow-hidden bg-lavender-100 dark:bg-slate-800">
           <Image
             src={product.images.main}
@@ -71,7 +84,7 @@ export function ProductCard({ product }: ProductCardProps) {
             </span>
           </div>
         </div>
-      </Link>
+      </PrefetchLink>
     </article>
   );
 }
