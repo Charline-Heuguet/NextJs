@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
+import { WebVitalsReporter } from "@/components/observability/WebVitalsReporter";
+import { ServiceWorkerRegister } from "@/components/pwa/ServiceWorkerRegister";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -20,11 +22,19 @@ const fontDisplay = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  ),
   title: {
     default: "My supa store",
     template: "%s · My supa store",
   },
-  description: "Boutique en ligne — découvrez nos produits",
+  description: "Boutique en ligne : découvrez nos produits",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    title: "My supa store",
+  },
 };
 
 export default function RootLayout({
@@ -37,7 +47,11 @@ export default function RootLayout({
       lang="fr"
       className={`${geistSans.variable} ${geistMono.variable} ${fontDisplay.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-background text-foreground">{children}</body>
+      <body className="min-h-full bg-background text-foreground">
+        <WebVitalsReporter />
+        <ServiceWorkerRegister />
+        {children}
+      </body>
     </html>
   );
 }

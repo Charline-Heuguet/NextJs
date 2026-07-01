@@ -35,9 +35,40 @@ export async function generateMetadata(
     return { title: "Produit introuvable" };
   }
 
+  const keywords = [
+    product.name,
+    product.brand,
+    product.category,
+    product.sku,
+    "tech",
+    "boutique",
+  ];
+
   return {
     title: product.name,
     description: product.description,
+    keywords,
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+      },
+    },
+    openGraph: {
+      title: product.name,
+      description: product.description,
+      type: "website",
+      locale: "fr_FR",
+      siteName: process.env.NEXT_PUBLIC_SITE_NAME ?? "My supa store",
+      images: [
+        {
+          url: product.images.main,
+          alt: product.name,
+        },
+      ],
+    },
   };
 }
 

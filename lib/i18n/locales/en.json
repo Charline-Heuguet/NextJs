@@ -1,0 +1,18 @@
+{
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "sponsored": "Sponsored",
+    "demo": "Demo"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "sponsored": "Sponsored",
+    "admin": "Administration"
+  },
+  "language": {
+    "fr": "FR",
+    "en": "EN",
+    "label": "Language"
+  }
+}

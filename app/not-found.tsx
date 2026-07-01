@@ -3,10 +3,20 @@ import { Suspense } from "react";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 
+function HeaderFallback() {
+  return (
+    <header className="border-b border-lavender-200 bg-lavender-50/80 dark:border-slate-700 dark:bg-slate-900/80">
+      <div className="mx-auto h-16 max-w-6xl animate-pulse px-6" />
+    </header>
+  );
+}
+
 export default function NotFound() {
   return (
     <div className="flex min-h-full flex-col">
-      <Header />
+      <Suspense fallback={<HeaderFallback />}>
+        <Header />
+      </Suspense>
       <main className="flex flex-1 flex-col items-center justify-center px-6 py-24">
         <h1 className="font-display text-6xl font-semibold text-lavender-900 dark:text-lavender-100">
           404

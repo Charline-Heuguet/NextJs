@@ -115,6 +115,36 @@ export default function DemoPage() {
 
         <section className="rounded-2xl border border-lavender-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-900">
           <h2 className="font-semibold text-lavender-900 dark:text-lavender-100">
+            Variables d&apos;environnement
+          </h2>
+          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+            Jour 4 : NEXT_PUBLIC_* vs variable serveur.
+          </p>
+          <Link
+            href="/demo/env"
+            className="mt-4 inline-block rounded-full bg-rose-500 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-rose-400"
+          >
+            Comparer client / serveur
+          </Link>
+        </section>
+
+        <section className="rounded-2xl border border-lavender-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-900">
+          <h2 className="font-semibold text-lavender-900 dark:text-lavender-100">
+            Debug
+          </h2>
+          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+            Jour 4 : point d&apos;arrêt front avec debugger.
+          </p>
+          <Link
+            href="/demo/debug"
+            className="mt-4 inline-block rounded-full bg-rose-500 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-rose-400"
+          >
+            Tester le debug
+          </Link>
+        </section>
+
+        <section className="rounded-2xl border border-lavender-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-900">
+          <h2 className="font-semibold text-lavender-900 dark:text-lavender-100">
             404
           </h2>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">

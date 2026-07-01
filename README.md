@@ -2,6 +2,10 @@
 
 Boutique Next.js 16 (App Router, Prisma, SQLite) réalisée en TD.
 
+## Aide-mémoire
+
+Le fichier [`notions.md`](./notions.md) récapitule les concepts clés des ateliers Jour 3 et Jour 4 : Server Actions, auth, cache, PWA, i18n, tests, etc.
+
 **Commandes utiles :**
 ```bash
 npm run dev        # serveur de développement
@@ -153,7 +157,53 @@ npx prisma studio  # interface base de données (lire l'URL affichée)
 
 ## Atelier Jour 4
 
-*À venir.*
+**Objectif :** observabilité, SEO, env, analyse bundles, PWA, debug, i18n et tests.
+
+**Ce qui a été fait :**
+
+**01 Observabilité**
+- Composant client `WebVitalsReporter` (`useReportWebVitals`)
+- Logs console des métriques (LCP, INP, CLS…) et identification de la plus impactante
+
+**02 SEO**
+- `generateMetadata` enrichi sur `/products/[slug]` : title (template), description, keywords, robots, openGraph
+- `metadataBase` dans le layout racine pour les URLs absolues
+
+**03 Variables d'environnement**
+- `NEXT_PUBLIC_SITE_NAME` affichée côté client (`SiteNameBanner`)
+- Route `/api/server-env` pour exposer une variable serveur (`STORE_REGION`)
+- Page démo : `/demo/env`
+
+**04 Analyse des bundles**
+- Commande `npm run analyze` (`next experimental-analyze`)
+- Synthèse : `docs/analyse-bundles.md`
+
+**05 PWA**
+- `public/manifest.json` référencé dans les métadonnées
+- `public/sw.js` : stratégie network-first avec fallback cache
+- Composant `ServiceWorkerRegister` (enregistrement du SW)
+- Vérification : Chrome DevTools → Application
+
+**06 Debug**
+- Composant `DebugBreakpoint` avec `debugger;`
+- Page démo : `/demo/debug`
+- Back : `NODE_OPTIONS='--inspect' npm run dev`
+
+**07 Multilingue (fr / en)**
+- Dictionnaires JSON + helper i18n (`lib/i18n/`)
+- Cookie `NEXT_LOCALE`, composant `LanguageSwitcher`
+- Traductions appliquées au header et au footer
+- Bonus proxy : déduction de la locale via `Accept-Language` si cookie absent
+
+**08 Testing**
+- Vitest + RTL : règles métier produit, `LanguageSwitcher`
+- Playwright : liste produits, navigation fiche, switch de langue
+- Commandes : `npm test`, `npm run test:e2e`
+
+**Variables d'environnement (.env)**
+- `NEXT_PUBLIC_SITE_NAME` : nom public du site
+- `NEXT_PUBLIC_SITE_URL` : URL de base (SEO, openGraph)
+- `STORE_REGION` : variable serveur (exemple)
 
 ---
 
@@ -174,3 +224,5 @@ npx prisma studio  # interface base de données (lire l'URL affichée)
 | `/demo/rendering` | Comparaison statique / ISR / dynamique |
 | `/demo/cache` | Stratégies de cache GraphQL |
 | `/demo/parallel-routes/[slug]` | Parallel routes |
+| `/demo/env` | Démo variables d'environnement |
+| `/demo/debug` | Démo debug front / back |

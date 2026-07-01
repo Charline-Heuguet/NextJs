@@ -1,0 +1,33 @@
+{
+  "name": "My supa store",
+  "short_name": "SupaStore",
+  "description": "Boutique en ligne de produits tech",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf5ff",
+  "theme_color": "#f43f5e",
+  "orientation": "portrait-primary",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "/file.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/file.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/file.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "form_factor": "wide"
+    }
+  ]
+}

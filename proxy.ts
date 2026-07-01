@@ -6,6 +6,29 @@ import {
   parseAbPrefetchVariant,
   pickRandomAbVariant,
 } from "@/lib/ab-test";
+import {
+  LOCALE_COOKIE,
+  detectLocaleFromAcceptLanguage,
+  parseLocale,
+} from "@/lib/i18n";
+
+function applyLocaleCookie(
+  request: NextRequest,
+  response: NextResponse,
+): NextResponse {
+  const existing = parseLocale(request.cookies.get(LOCALE_COOKIE)?.value);
+  if (!existing) {
+    const locale = detectLocaleFromAcceptLanguage(
+      request.headers.get("accept-language"),
+    );
+    response.cookies.set(LOCALE_COOKIE, locale, {
+      path: "/",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 365,
+    });
+  }
+  return response;
+}
 
 function applyAbPrefetchCookie(
   request: NextRequest,
@@ -45,7 +68,7 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  return applyAbPrefetchCookie(request, response);
+  return applyAbPrefetchCookie(request, applyLocaleCookie(request, response));
 }
 
 export const config = {
